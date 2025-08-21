@@ -6,18 +6,22 @@
     <title>Makutano Social App</title>
 </head>
 <body>
-    <h1>Makutano App</h1>
-    <% if(18>21){ %>
+<h1>Makutano App</h1>
+<h2>Recent posts</h2>
+<section class="posts">
 
-        <h4> Join this app </h3>
-        <p>This is server side rendering</p>
 
-    <% }else{ %>
+<% posts.forEach(post=>{ %>
 
-        <h2> Tokomea!!!!! </h2>
-        <p>Meaning, the server(node) will convert this ejs to pure html before rendering/sending to the browser/client </p>
+<article>
+<p><%= post.content %></p>
+<p>Posted by: <%= post.postowner %> <br>
+Posted on <%= post.createdat.toLocaleDateString() %></p>
+</article>
 
-    <% } %>
+<% }) %>
+
+</section>
 
 </body>
 </html>

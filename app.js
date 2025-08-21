@@ -5,13 +5,20 @@ const connection = mysql.createConnection({
   host: "localhost",
   user: "root",
   password: "password",
-  database: "socialapp",
+  database: "socialapp2",
   port: 3307,
 });
 
 // routes
 app.get("/", (req, res) => {
-  res.render("index.ejs");
+  // render posts
+  connection.query("SELECT * FROM posts limit 6", (dberr, results) => {
+    if (dberr) {
+      return res.status(500).send("Error retrieving posts" + dberr);
+    }
+    console.log(results);
+    res.render("index.ejs", { posts: results });
+  });
 });
 
 app.get("/users", (req, res) => {
@@ -24,7 +31,6 @@ app.get("/users", (req, res) => {
     res.render("users.ejs", { users: results });
   });
 });
-app.get("/posts", (req, res) => {});
 // 404
 app.use((req, res) => {
   res.status(404).send("Page Not Found");
