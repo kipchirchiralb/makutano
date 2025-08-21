@@ -13,6 +13,7 @@ const connection = mysql.createConnection({
 app.get("/", (req, res) => {
   res.render("index.ejs");
 });
+
 app.get("/users", (req, res) => {
   console.log(req.query.id);
   console.log(req.query.person);
