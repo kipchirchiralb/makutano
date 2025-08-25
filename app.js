@@ -9,10 +9,13 @@ const connection = mysql.createConnection({
   port: 3307,
 });
 
+// middleware
+app.use(express.urlencoded({ extended: true })); // to parse/extract incoming/request form data
+
 // routes
 app.get("/", (req, res) => {
   // render posts
-  connection.query("SELECT * FROM posts limit 6", (dberr, results) => {
+  connection.query("SELECT * FROM posts  limit 6", (dberr, results) => {
     if (dberr) {
       return res.status(500).send("Error retrieving posts" + dberr);
     }
@@ -20,6 +23,19 @@ app.get("/", (req, res) => {
     res.render("index.ejs", { posts: results });
   });
 });
+
+app.post("/newpost", (req, res) => {
+  // sql insert into
+  console.log(req.body.content);
+  connection.query(`INSERT INTO posts(content,postowner) VALUES("${req.body.content}",2)`, (dberr)=>{
+    if (dberr) {
+      return res.status(500).send("Error storing post" + dberr);
+    }
+    res.redirect("/");
+  })
+});
+
+// try adding a new user fro a form submision --- create newuser.js file, newuser get route and a newuser post route
 
 app.get("/users", (req, res) => {
   console.log(req.query.id);

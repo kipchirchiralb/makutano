@@ -1,27 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Makutano Social App</title>
-</head>
-<body>
-<h1>Makutano App</h1>
-<h2>Recent posts</h2>
-<section class="posts">
+  </head>
+  <body>
+    <h1>Makutano App</h1>
+    <h2>What's on your mind</h2>
+    <form action="http://localhost:3003/newpost" method="post">
+      <textarea name="content" id="content" cols="30" rows="10"></textarea>
+      <br />
+      <button type="submit">Post</button>
+    </form>
+    <h2>Recent posts</h2>
+    <hr />
+    <section class="posts">
+      <% posts.forEach(post=>{ %>
 
-
-<% posts.forEach(post=>{ %>
-
-<article>
-<p><%= post.content %></p>
-<p>Posted by: <%= post.postowner %> <br>
-Posted on <%= post.createdat.toLocaleDateString() %></p>
-</article>
-
-<% }) %>
-
-</section>
-
-</body>
+      <article>
+        <p><%= post.content %></p>
+        <p>
+          Posted by: <%= post.postowner %> <br />
+          Posted on <%= post.createdat.toLocaleDateString() %>
+        </p>
+      </article>
+      <hr />
+      <% }) %>
+    </section>
+  </body>
 </html>
