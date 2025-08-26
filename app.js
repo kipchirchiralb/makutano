@@ -56,6 +56,8 @@ app.post("/newuser", (req, res) => {
   );
 });
 
+// create a diffrerent registration form, routes(/register) and table with more user information - firstname,lastname,email,phone,password, yob, gender, country, city
+
 app.get("/users", (req, res) => {
   console.log(req.query.id);
   console.log(req.query.person);
