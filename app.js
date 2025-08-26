@@ -27,15 +27,34 @@ app.get("/", (req, res) => {
 app.post("/newpost", (req, res) => {
   // sql insert into
   console.log(req.body.content);
-  connection.query(`INSERT INTO posts(content,postowner) VALUES("${req.body.content}",2)`, (dberr)=>{
-    if (dberr) {
-      return res.status(500).send("Error storing post" + dberr);
+  connection.query(
+    `INSERT INTO posts(content,postowner) VALUES("${req.body.content}",2)`,
+    (dberr) => {
+      if (dberr) {
+        return res.status(500).send("Error storing post" + dberr);
+      }
+      res.redirect("/");
     }
-    res.redirect("/");
-  })
+  );
 });
 
 // try adding a new user fro a form submision --- create newuser.js file, newuser get route and a newuser post route
+app.get("/newuser", (req, res) => {
+  res.render("newuser.ejs");
+});
+app.post("/newuser", (req, res) => {
+  console.log(req.body);
+  const { fullname, email, password } = req.body;
+  connection.query(
+    `INSERT INTO users(fullname,email,password) VALUES("${fullname}","${email}","${password}")`,
+    (dberr) => {
+      if (dberr) {
+        return res.status(500).send("Error storing/creating new user" + dberr);
+      }
+      res.redirect("/users");
+    }
+  );
+});
 
 app.get("/users", (req, res) => {
   console.log(req.query.id);
@@ -52,4 +71,10 @@ app.use((req, res) => {
   res.status(404).send("Page Not Found");
 });
 // Start the app
-app.listen(3003, () => console.log("App running on http://127.0.0.1:3003"));
+app.listen(3003, (err) => {
+  if (err) {
+    return console.log("Error starting the server" + err);
+  }
+
+  console.log("App running on http://127.0.0.1:3003");
+});
