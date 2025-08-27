@@ -1,4 +1,5 @@
 const express = require("express");
+const session = require("express-session");
 const app = express();
 const mysql = require("mysql");
 const connection = mysql.createConnection({
@@ -11,16 +12,18 @@ const connection = mysql.createConnection({
 
 // middleware
 app.use(express.urlencoded({ extended: true })); // to parse/extract incoming/request form data
+app.use(session({ secret: "djsdsd", resave: false, saveUninitialized: true })); // session  manager
 
 // routes
 app.get("/", (req, res) => {
+  const sqlCode = `SELECT * FROM posts limit 6`;
   // render posts
-  connection.query("SELECT * FROM posts  limit 6", (dberr, results) => {
+  connection.query(sqlCode, (dberr, results) => {
     if (dberr) {
       return res.status(500).send("Error retrieving posts" + dberr);
     }
     console.log(results);
-    res.render("index.ejs", { posts: results });
+    res.render("index.ejs", { posts: results, user: req.session?.user });
   });
 });
 
@@ -68,6 +71,30 @@ app.get("/users", (req, res) => {
     res.render("users.ejs", { users: results });
   });
 });
+
+app.get("/login", (req, res) => {
+  res.render("login.ejs");
+});
+app.post("/login", (req, res) => {
+  console.log(req.body);
+  const { email, password } = req.body;
+  const sqlStatement = `SELECT fullname,email,password FROM users WHERE email="${email}" AND password="${password}"`;
+  console.log(sqlStatement);
+
+  connection.query(sqlStatement, (dberr, results) => {
+    if (dberr) {
+      return res.status(500).send("Error logging in" + dberr);
+    }
+    console.log(results);
+    if (results.length === 0) {
+      return res.status(401).send("Invalid email or password");
+    }
+    // login successful
+    req.session.user = results[0]; // store user info in session cookie
+    res.send("Login successful. Welcome " + results[0].fullname);
+  });
+});
+
 // 404
 app.use((req, res) => {
   res.status(404).send("Page Not Found");
