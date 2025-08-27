@@ -7,11 +7,12 @@
   </head>
   <body>
     <h1>Makutano App</h1>
+    
     <% if(user){ %>
-    <h2>Welcome, <%= user.fullname %></h2>
+      <h2>Welcome, <%= user.fullname %></h2>
     <% }else{ %>
-    <h2>Welcome, Guest</h2>
-    <a href="/login">Login</a>
+      <h2>Welcome, Guest</h2>
+      <a href="/login">Login</a>
     <% } %>
     <a href="/newuser">Add new user</a>
     <a href="/newclient">Add new cLient</a>
